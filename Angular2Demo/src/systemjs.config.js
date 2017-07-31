@@ -36,8 +36,7 @@
             '@progress/kendo-angular-dialog': 'npm:@progress/kendo-angular-dialog',
             '@telerik/kendo-draggable': 'npm:@telerik/kendo-draggable',
             '@telerik/kendo-intl': 'npm:@telerik/kendo-intl',
-            '@angular/platform-browser/animations': 'npm:@angular/platform-browser/animations',
-
+            
             '@angular/animations': 'npm:@angular/animations/bundles/animations.umd.js',
             // other libraries
             'rxjs': 'npm:rxjs',

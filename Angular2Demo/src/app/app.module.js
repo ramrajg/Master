@@ -16,7 +16,8 @@ var kendo_angular_inputs_1 = require("@progress/kendo-angular-inputs");
 var kendo_angular_dialog_1 = require("@progress/kendo-angular-dialog");
 //import { PPCMessageBoxComponent } from './ppcMessageBox/ppcMessageBox.component';
 var app_component_1 = require("./app.component");
-var dropDown_component_1 = require("./dropDown/dropDown-component");
+var employee_component_1 = require("./employee/employee-component");
+//import { DropDownComponent } from './dropDown/dropDown-component';
 var AppModule = (function () {
     function AppModule() {
     }
@@ -25,7 +26,7 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [platform_browser_1.BrowserModule, kendo_angular_dropdowns_1.DropDownsModule, kendo_angular_buttons_1.ButtonsModule, kendo_angular_layout_1.LayoutModule, kendo_angular_inputs_1.InputsModule, kendo_angular_dialog_1.DialogModule, forms_1.FormsModule],
-        declarations: [app_component_1.AppComponent, dropDown_component_1.DropDownComponent],
+        declarations: [app_component_1.AppComponent, employee_component_1.EmployeeComponent],
         bootstrap: [app_component_1.AppComponent]
     })
 ], AppModule);
