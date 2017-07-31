@@ -1,0 +1,23 @@
+﻿
+<kendo-dialog title={{messageTitle}} *ngIf="IsOpened" (close)="closeDialog()">
+    <div style="text-align: center; margin: 30px;">
+        <h5>{{messageText}}</h5>
+    </div>
+    <kendo-dialog-actions *ngIf="messageBoxType=='Ok'">
+        <button kendoButton (click)="closeDialog()">Ok</button>
+    </kendo-dialog-actions>
+    <kendo-dialog-actions *ngIf="messageBoxType=='Confirm'">
+        <button kendoButton (click)="onAccept()">Yes</button>
+        <button kendoButton (click)="onDecline()">No</button>
+    </kendo-dialog-actions>
+    <div *ngIf="messageBoxType=='Review'">
+        <p>
+            <textarea class="inpue-width k-textbox" [(ngModel)]="ReviewComments" placeholder="Type Review Comments here"> </textarea>
+        </p>
+        <p>
+            <button kendoButton primary="true" (click)="onReview(ReviewComments)" class="ppc-Button">Save Review Comments</button>
+        </p>
+    </div>
+</kendo-dialog>
+
+
