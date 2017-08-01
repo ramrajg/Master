@@ -28,46 +28,8 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        template: "<div>\n                <h1>{{PageHeader ? PageHeader : getFullName()}}</h1>\n                <img src ='{{imagePath}}'/>\n                <my-employee></my-employee>\n                <button [disabled] = 'isDisabled'>Click Me </button>\n                <span bind-innerHTML= 'getFullName()'></span>\n                </div>\n                "
+        template: "<div>\n                <login></login>\n                </div>"
     })
-    //@Component({
-    //    selector: 'my-app',
-    //    template: `<div>
-    //                <my-dropDown  (onPPCEnvChange)="onPPCEnvChange($event)"></my-dropDown>
-    //                </div>
-    //                `
-    //})
-    //@Component({
-    //    selector: 'my-app',
-    //    template: `<div>
-    //                <ppcMessageBox></ppcMessageBox>
-    //                </div>
-    //                `
-    //})
-    //@Component({
-    //    selector: 'my-app',
-    //    template: `
-    //                <div class="example-config" >
-    //                Selected value is: { { value | kendoDate:'MM/dd/yyyy' } }
-    //                </div>
-    //                < div class="example-wrapper" style= "min-height: 400px" >
-    //                <p>Select a date: </p>
-    //                < kendo - datepicker
-    //                [(value)]="value"
-    //                > </kendo-datepicker>
-    //                <p>(use Alt+↓ to open the calendar, ← and →  to navigate, ↑ to increment and ↓ to decrement the value) < /p>
-    //                < /div>      `
-    //    })
-    //@Component({
-    //    selector: 'my-app',
-    //    template: `
-    //                <div class="example-wrapper" >
-    //                <p>T - shirt size: </p>
-    //                < kendo-dropdownlist [data]="listItems" >
-    //                </kendo-dropdownlist>
-    //                < /div>
-    //                `
-    //})
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

@@ -3,59 +3,10 @@
 @Component({
     selector: 'my-app',
     template: `<div>
-                <h1>{{PageHeader ? PageHeader : getFullName()}}</h1>
-                <img src ='{{imagePath}}'/>
-                <my-employee></my-employee>
-                <button [disabled] = 'isDisabled'>Click Me </button>
-                <span bind-innerHTML= 'getFullName()'></span>
-                </div>
-                `
+                <login></login>
+                </div>`
 })
 
-//@Component({
-//    selector: 'my-app',
-//    template: `<div>
-//                <my-dropDown  (onPPCEnvChange)="onPPCEnvChange($event)"></my-dropDown>
-//                </div>
-//                `
-//})
-//@Component({
-//    selector: 'my-app',
-//    template: `<div>
-//                <ppcMessageBox></ppcMessageBox>
-//                </div>
-//                `
-//})
-//@Component({
-//    selector: 'my-app',
-//    template: `
-//                <div class="example-config" >
-//                Selected value is: { { value | kendoDate:'MM/dd/yyyy' } }
-//                </div>
-//                < div class="example-wrapper" style= "min-height: 400px" >
-//                <p>Select a date: </p>
-//                < kendo - datepicker
-//                [(value)]="value"
-//                > </kendo-datepicker>
-//                <p>(use Alt+↓ to open the calendar, ← and →  to navigate, ↑ to increment and ↓ to decrement the value) < /p>
-//                < /div>      `
-//    })
-
-
-
-
-
-
-//@Component({
-//    selector: 'my-app',
-//    template: `
-//                <div class="example-wrapper" >
-//                <p>T - shirt size: </p>
-//                < kendo-dropdownlist [data]="listItems" >
-//                </kendo-dropdownlist>
-//                < /div>
-//                `
-//})
 
 
 

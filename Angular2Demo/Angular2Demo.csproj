@@ -74,6 +74,8 @@
     <Content Include="src\app\dropDown\dropDown-component.css" />
     <Content Include="src\app\dropDown\dropDown-component.html" />
     <Content Include="src\app\employee\employee.component.css" />
+    <Content Include="src\app\loginScreen\loginScreen-component.html" />
+    <Content Include="src\app\loginScreen\loginScreen-component.css" />
     <Content Include="src\app\ppcMessageBox\ppcMessageBox.component.css" />
     <Content Include="src\app\ppcMessageBox\ppcMessageBox.component.html" />
     <Content Include="src\tsconfig.json" />
@@ -104,6 +106,7 @@
     <TypeScriptCompile Include="src\app\app.module.ts" />
     <TypeScriptCompile Include="src\app\dropDown\dropDown-component.ts" />
     <TypeScriptCompile Include="src\app\employee\employee-component.ts" />
+    <TypeScriptCompile Include="src\app\loginScreen\loginScreen-component.ts" />
     <TypeScriptCompile Include="src\app\PPCBaseComponents.ts" />
     <TypeScriptCompile Include="src\app\ppcMessageBox\ppcMessageBox.component.ts" />
     <TypeScriptCompile Include="src\main.ts" />

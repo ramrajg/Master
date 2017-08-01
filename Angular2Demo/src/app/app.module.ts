@@ -12,12 +12,15 @@ import { DialogModule } from '@progress/kendo-angular-dialog';
 //import { PPCMessageBoxComponent } from './ppcMessageBox/ppcMessageBox.component';
 import { AppComponent } from './app.component';
 import { EmployeeComponent } from './employee/employee-component';
+import { LoginComponent } from './loginScreen/loginScreen-component';
+
+
 //import { DropDownComponent } from './dropDown/dropDown-component';
 
 
 @NgModule({
     imports: [BrowserModule, DropDownsModule, ButtonsModule, LayoutModule, InputsModule, DialogModule, FormsModule],
-    declarations: [AppComponent, EmployeeComponent],
+    declarations: [AppComponent, EmployeeComponent, LoginComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
