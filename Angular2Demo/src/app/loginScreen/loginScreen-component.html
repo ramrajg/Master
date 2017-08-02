@@ -1,17 +1,55 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>Login Screen</title>
-	<meta charset="utf-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Material Design Bootstrap Template</title>
+
+    <!-- Font Awesome -->
+   <!-- <link href="https://mdbootstrap.com/live/_MDB/css/compiled.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
-    <label>User Name:</label>
-    <input id="username" type="text" />
-    <br />
-    <label>Password:</label>
-    <input id="password" type="text" />
-    <br />
-    <button>Login</button>
-    <button>Cancel</button>
+    <div class="mdl-layout mdl-layout--fixed-header mdl-js-layout  mdl-color--white-100">
+        <main class="mdl-layout__content main_content">
+            <h3><strong>Material Design Lite Login Template</strong></h3>
+            <div class="login-form-div mdl-grid mdl-shadow--2dp">
+                <div class="mdl-cell mdl-cell--12-col cell_con">
+                    <i class="material-icons">person</i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" id="sample2">
+                        <label class="mdl-textfield__label" for="sample2">Enter valid Email</label>
+                        <span class="mdl-textfield__error">Invalid Email...!</span>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col cell_con">
+                    <i class="material-icons">lock</i>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="sample2">
+                        <label class="mdl-textfield__label" for="sample2">Enter Password</label>
+                    </div>
+                </div>
+                <div class="mdl-cell cell_con">
+                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
+                        <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input">
+                        <span class="mdl-checkbox__label">Remember Me</span>
+                    </label>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col  login-btn-con">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary btn">Login</button>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+                    <a class="mdl-button--primary">Register now !</a>
+                </div>
+                <div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+                    <a class="mdl-button--primary">Forgot password ?</a>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
 </html>

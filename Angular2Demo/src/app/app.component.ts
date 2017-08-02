@@ -5,6 +5,7 @@
     template: `<div>
                 <login></login>
                 </div>`
+    
 })
 
 
