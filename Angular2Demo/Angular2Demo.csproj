@@ -71,13 +71,11 @@
     <Content Include="packages.config" />
     <Content Include="bs-config.json" />
     <Content Include="package.json" />
-    <Content Include="src\app\dropDown\dropDown-component.css" />
-    <Content Include="src\app\dropDown\dropDown-component.html" />
     <Content Include="src\app\employee\employee.component.css" />
+    <Content Include="src\app\Home\home.component.html" />
     <Content Include="src\app\loginScreen\loginScreen-component.html" />
     <Content Include="src\app\loginScreen\loginScreen-component.css" />
-    <Content Include="src\app\ppcMessageBox\ppcMessageBox.component.css" />
-    <Content Include="src\app\ppcMessageBox\ppcMessageBox.component.html" />
+    <Content Include="src\assets\app.css" />
     <Content Include="src\tsconfig.json" />
     <Content Include="tslint.json" />
     <None Include="Web.Debug.config">
@@ -104,11 +102,15 @@
     <TypeScriptCompile Include="src\app\app.component.spec.ts" />
     <TypeScriptCompile Include="src\app\app.component.ts" />
     <TypeScriptCompile Include="src\app\app.module.ts" />
-    <TypeScriptCompile Include="src\app\dropDown\dropDown-component.ts" />
     <TypeScriptCompile Include="src\app\employee\employee-component.ts" />
+    <TypeScriptCompile Include="src\app\Home\home.component.ts" />
     <TypeScriptCompile Include="src\app\loginScreen\loginScreen-component.ts" />
-    <TypeScriptCompile Include="src\app\PPCBaseComponents.ts" />
-    <TypeScriptCompile Include="src\app\ppcMessageBox\ppcMessageBox.component.ts" />
+    <TypeScriptCompile Include="src\app\_models\index.ts" />
+    <TypeScriptCompile Include="src\app\_models\user.ts" />
+    <TypeScriptCompile Include="src\app\_services\alert.service.ts" />
+    <TypeScriptCompile Include="src\app\_services\authentication.service.ts" />
+    <TypeScriptCompile Include="src\app\_services\index.ts" />
+    <TypeScriptCompile Include="src\app\_services\user.service.ts" />
     <TypeScriptCompile Include="src\main.ts" />
   </ItemGroup>
   <ItemGroup>

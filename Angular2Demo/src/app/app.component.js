@@ -7,6 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+//import '../assets/app.css'
 var AppComponent = (function () {
     function AppComponent() {
         this.value = new Date(2000, 2, 10);
