@@ -83,30 +83,9 @@ namespace WeeklyStatus_Prj
            
         private static void googleConnect()
         {
-            //SpreadsheetsService myService = new SpreadsheetsService("exampleCo-exampleApp-1");
-            //myService.setUserCredentials("ramrajgg@gmail.com", "Ramrajg1515");
-            //SpreadsheetQuery query = new SpreadsheetQuery();
-            //SpreadsheetFeed feed = myService.Query(query);
-
-            //Console.WriteLine("Your spreadsheets: ");
-            //foreach (SpreadsheetEntry entry in feed.Entries)
-            //{
-            //    Console.WriteLine(entry.Title.Text);
-            //}
-
-
-
-            //string[] scopes = new string[] {
-            //AnalyticsService.Scope.Analytics,  // view and manage your Google Analytics data
-            //AnalyticsService.Scope.AnalyticsEdit,  // Edit and manage Google Analytics Account
-            //AnalyticsService.Scope.AnalyticsManageUsers,   // Edit and manage Google Analytics Users
-            //AnalyticsService.Scope.AnalyticsReadonly};     // View Google Analytics Data
-
-            string queryResult = "";
             var scopes = new[] { "https://spreadsheets.google.com/feeds/ https://docs.googleusercontent.com/ https://docs.google.com/feeds/ https://www.google.com/m8/feeds/" };
             String CLIENT_ID = "913302065451-onk020mf6k1rkteqt91iiik5bmirjqsl.apps.googleusercontent.com"; // found in Developer console
             String CLIENT_SECRET = "r9X31RRhzh4wDehf5r8cKiP7";// found in Developer console
-                                                              // here is where we Request the user to give us access, or use the Refresh Token that was previously stored in %AppData%
             UserCredential credential =
                     GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
                     {
@@ -117,78 +96,35 @@ namespace WeeklyStatus_Prj
                     , Environment.UserName
                     , CancellationToken.None
                     , new FileDataStore("Daimto.GoogleSpreedSheet.Auth.Store")).Result;
-
-
+            
             SpreadsheetsService spreadsheetsService = new SpreadsheetsService("Daily Status for May");
             var requestFactory = new GDataRequestFactory("Daily Status for May");
             requestFactory.CustomHeaders.Add(string.Format("Authorization: Bearer {0}", credential.Token.AccessToken));
             spreadsheetsService.RequestFactory = requestFactory;
 
             SpreadsheetQuery query = new SpreadsheetQuery();
-            queryResult = excuteQueryGoogleSheet(query.BaseAddress);
-           // SpreadsheetFeed feed = spreadsheetsService.Query(query);
-            //AnalyticsService service = new AnalyticsService(new BaseClientService.Initializer()
-            //{
-            //    HttpClientInitializer = credential,
-            //    ApplicationName = "Analytics API Sample",
-            //});
+           SpreadsheetFeed feed = spreadsheetsService.Query(query);
+            foreach (SpreadsheetEntry entry in feed.Entries)
+            {
+                Console.WriteLine(entry.Title.Text);
+            }
+            SpreadsheetEntry mySpreadsheet = (SpreadsheetEntry)feed.Entries[0];
+            AtomLink link = mySpreadsheet.Links.FindService(GDataSpreadsheetsNameTable.WorksheetRel, null);
 
-            //DataResource.GaResource.GetRequest request = spreadsheetsService.Data.Ga.Get("ga:8903098", "2014-01-01", "2014-01-01", "ga:sessions");
-            //request.MaxResults = 1000;
-            //GaData result = request.Execute();
+            WorksheetQuery wQuery = new WorksheetQuery(link.HRef.ToString());
+            WorksheetFeed wFeed = spreadsheetsService.Query(wQuery);
 
+            //retrieve the cells in a worksheet
+            WorksheetEntry worksheetEntry = (WorksheetEntry)wFeed.Entries[wFeed.Entries.Count-1];
+            AtomLink cLink = worksheetEntry.Links.FindService(GDataSpreadsheetsNameTable.CellRel, null);
 
+            CellQuery cQuery = new CellQuery(cLink.HRef.ToString());
+            CellFeed cFeed = spreadsheetsService.Query(cQuery);
 
-
-            //string clientId = "913302065451-onk020mf6k1rkteqt91iiik5bmirjqsl.apps.googleusercontent.com"; // https://console.developers.google.com/project/xxx
-            //string clientSecret = "r9X31RRhzh4wDehf5r8cKiP7"; // https://console.developers.google.com/project/xxx
-            //string accessCode = null; // You will get this code after GetAccessToken method
-            //string redirectUri = null; // https://console.developers.google.com/project/xxx
-            //string applicationName = "https://console.developers.google.com/project/august-edge-187615"; // https://console.developers.google.com/project/xxx
-            //                                                                                             // Scopes https://support.google.com/a/answer/162106?hl=en
-            //string scopes = "https://www.googleapis.com/auth/spreedsheet"; // put your scope like https://www.google.com/m8/feeds/
-            //string accessType = "offline";
-            //string tokenType = "refresh";
-
-            //OAuth2Parameters parameters = new OAuth2Parameters
-            //{
-            //    ClientId = clientId,
-            //    ClientSecret = clientSecret,
-            //    Scope = scopes,
-            //    AccessType = accessType,
-            //    TokenType = tokenType
-            //};
-
-            //if (accessCode == null)
-            //{
-            //    string url = OAuthUtil.CreateOAuth2AuthorizationUrl(parameters);
-            //    // Start webbrowser
-            //    Process.Start(url);
-
-            //    // Load code from web via popup, etc.
-            //    //    parameters.AccessCode = accessCodeFromWeb;
-            //}
-
-            //// Check accessToken and refreshToken
-            //// After first acceess with  GetAccessToken you will get that information
-            //if (accessToken == null || refreshToken == null)
-            //{
-            //    OAuthUtil.GetAccessToken(parameters);
-
-            //    // Save yours accessToken and refreshToken for next connection
-            //    accessToken = parameters.AccessToken;
-            //    refreshToken = parameters.RefreshToken;
-            //}
-            //else
-            //{
-            //    // Restore your token from config file, etc.
-            //    parameters.AccessToken = accessToken;
-            //    parameters.RefreshToken = refreshToken;
-            //}
-
-            // RequestSettings rs = new RequestSettings(applicationName, parameters);
-
-            // return new ContactsRequest(rs);
+            foreach (CellEntry cCell in cFeed.Entries)
+            {
+                Console.WriteLine("Value on row {0} and column {1} is {2}", cCell.Cell.Row, cCell.Cell.Column, cCell.Cell.Value);
+            }
         }
         private static void generateCSV(FilterKopf issues)
         {
@@ -408,7 +344,7 @@ namespace WeeklyStatus_Prj
                 }
             }
             string base64Credentials = GetEncodedCredentials();
-            request.Headers.Add("Authorization", "Bearer ya29.GlsUBQSuKpNme9mAHf6LTUGsXd91161x4OGpnZZlVIMMnBYtaa6BYYEo021n_1jSsal4_GjINJUsUsatcESSx2QDyNIL9csoZiJTCtrOt02kMgmS_vV3auLTnwN0");
+            request.Headers.Add("Authorization", "Bearer ya29.GlsVBZhSrfWdI800bgqgmjmcs1L-wkgLeOr2Ww29u5xXPeIW5XpSAI09Eg24PkOibrt05WJHNAymNtWHViAfkJjApgNlkBzuMd5wS1Xpyky5PsiRMk2zOr107n02");
             HttpWebResponse response = request.GetResponse() as HttpWebResponse;
             string result = string.Empty;
             using (Stream stream = response.GetResponseStream())
