@@ -38,6 +38,9 @@ namespace WeeklyStatus_Prj
         public static string emailCc = ConfigurationManager.AppSettings.Get("EmailCc");
         public static string SmtpHost = ConfigurationManager.AppSettings.Get("SmtpHost");
         public static int SmtpPort = int.Parse(ConfigurationManager.AppSettings.Get("SmtpPort"));
+        public static string GoogleClientId = ConfigurationManager.AppSettings.Get("GoogleClientId");
+        public static string GoogleClientSecret = ConfigurationManager.AppSettings.Get("GoogleClientSecret");
+
 
 
         static void Main(string[] args)
@@ -84,8 +87,8 @@ namespace WeeklyStatus_Prj
         private static void googleConnect()
         {
             var scopes = new[] { "https://spreadsheets.google.com/feeds/ https://docs.googleusercontent.com/ https://docs.google.com/feeds/ https://www.google.com/m8/feeds/" };
-            String CLIENT_ID = "913302065451-onk020mf6k1rkteqt91iiik5bmirjqsl.apps.googleusercontent.com"; // found in Developer console
-            String CLIENT_SECRET = "r9X31RRhzh4wDehf5r8cKiP7";// found in Developer console
+            String CLIENT_ID = GoogleClientId; // found in Developer console
+            String CLIENT_SECRET = GoogleClientSecret;// found in Developer console
             UserCredential credential =
                     GoogleWebAuthorizationBroker.AuthorizeAsync(new ClientSecrets
                     {
@@ -108,14 +111,14 @@ namespace WeeklyStatus_Prj
             {
                 Console.WriteLine(entry.Title.Text);
             }
-            SpreadsheetEntry mySpreadsheet = (SpreadsheetEntry)feed.Entries[0];
+            SpreadsheetEntry mySpreadsheet = (SpreadsheetEntry)feed.Entries[0];// to get the particular Sheet from the list of Sheet
             AtomLink link = mySpreadsheet.Links.FindService(GDataSpreadsheetsNameTable.WorksheetRel, null);
 
             WorksheetQuery wQuery = new WorksheetQuery(link.HRef.ToString());
             WorksheetFeed wFeed = spreadsheetsService.Query(wQuery);
 
             //retrieve the cells in a worksheet
-            WorksheetEntry worksheetEntry = (WorksheetEntry)wFeed.Entries[wFeed.Entries.Count-1];
+            WorksheetEntry worksheetEntry = (WorksheetEntry)wFeed.Entries[wFeed.Entries.Count-1];//to Get the Sheet
             AtomLink cLink = worksheetEntry.Links.FindService(GDataSpreadsheetsNameTable.CellRel, null);
 
             CellQuery cQuery = new CellQuery(cLink.HRef.ToString());

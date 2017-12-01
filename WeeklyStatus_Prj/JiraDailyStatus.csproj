@@ -119,19 +119,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="assignee.cs" />
-    <Compile Include="priority.cs" />
-    <Compile Include="reporter.cs" />
-    <Compile Include="fields.cs" />
-    <Compile Include="FilterProp.cs" />
-    <Compile Include="creator.cs" />
-    <Compile Include="issues.cs" />
-    <Compile Include="issuetype.cs" />
+    <Compile Include="Models\assignee.cs" />
+    <Compile Include="Models\priority.cs" />
+    <Compile Include="Models\reporter.cs" />
+    <Compile Include="Models\fields.cs" />
+    <Compile Include="Models\FilterProp.cs" />
+    <Compile Include="Models\creator.cs" />
+    <Compile Include="Models\issues.cs" />
+    <Compile Include="Models\issuetype.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="searchUrlprop.cs" />
-    <Compile Include="status.cs" />
-    <Compile Include="worklogs.cs" />
+    <Compile Include="Models\searchUrlprop.cs" />
+    <Compile Include="Models\status.cs" />
+    <Compile Include="Models\worklogs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
