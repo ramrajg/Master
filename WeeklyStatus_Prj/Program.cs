@@ -7,39 +7,36 @@ using System.Net;
 using System.Data;
 using System.IO;
 using Newtonsoft.Json;
-using System.Configuration;
 using Excel = Microsoft.Office.Interop.Excel;
 using Google.GData.Client;
-using Google.GData.Extensions;
 using Google.GData.Spreadsheets;
-using System.Diagnostics;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Analytics.v3;
 using System.Threading;
-using Google.Apis.Analytics.v3.Data;
-using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using JiraDailyStatus.Helper;
 
 namespace WeeklyStatus_Prj
 {
 
+
     class Program
     {
-        public static string jiraUrl = ConfigurationManager.AppSettings.Get("JiraUrl");
-        public static string FilterApi = ConfigurationManager.AppSettings.Get("FilterApi");
-        public static string IssuesApi = ConfigurationManager.AppSettings.Get("IssuesApi");
-        public static string JiraLogin = ConfigurationManager.AppSettings.Get("JiraLogin");
-        public static string JiraPwd = ConfigurationManager.AppSettings.Get("JiraPwd");
-        public static int DailyStatusFilterId = int.Parse(ConfigurationManager.AppSettings.Get("DailyStatusFilterId"));
-        public static int WeeklyStatusFilterId = int.Parse(ConfigurationManager.AppSettings.Get("WeeklyStatusFilterId"));
-        public static string emailFrom = ConfigurationManager.AppSettings.Get("EmailFrom");
-        public static string emailFromPwd = ConfigurationManager.AppSettings.Get("EmailFromPwd");
-        public static string emailTo = ConfigurationManager.AppSettings.Get("EmailTo");
-        public static string emailCc = ConfigurationManager.AppSettings.Get("EmailCc");
-        public static string SmtpHost = ConfigurationManager.AppSettings.Get("SmtpHost");
-        public static int SmtpPort = int.Parse(ConfigurationManager.AppSettings.Get("SmtpPort"));
-        public static string GoogleClientId = ConfigurationManager.AppSettings.Get("GoogleClientId");
-        public static string GoogleClientSecret = ConfigurationManager.AppSettings.Get("GoogleClientSecret");
+        public static string jiraUrl = AppSettings.Get<string>("jiraUrl");
+        public static string FilterApi = AppSettings.Get<string>("FilterApi");
+        public static string IssuesApi = AppSettings.Get<string>("IssuesApi");
+        public static string JiraLogin = AppSettings.Get<string>("JiraLogin");
+        public static string JiraPwd = AppSettings.Get<string>("JiraPwd");
+        public static int DailyStatusFilterId = AppSettings.Get<int>("DailyStatusFilterId");
+        public static int WeeklyStatusFilterId = AppSettings.Get<int>("WeeklyStatusFilterId");
+        public static string emailFrom = AppSettings.Get<string>("emailFrom");
+        public static string emailFromPwd = AppSettings.Get<string>("emailFromPwd");
+        public static string emailTo = AppSettings.Get<string>("emailTo");
+        public static string emailCc = AppSettings.Get<string>("emailCc");
+        public static string SmtpHost = AppSettings.Get<string>("SmtpHost");
+        public static int SmtpPort = AppSettings.Get<int>("SmtpPort");
+        public static string GoogleClientId = AppSettings.Get<string>("GoogleClientId");
+        public static string GoogleClientSecret = AppSettings.Get<string>("GoogleClientSecret");
+     
 
 
 
@@ -64,6 +61,7 @@ namespace WeeklyStatus_Prj
             else if (Daily_Weekly == "G")
             {
                 googleConnect();
+                return;
             }
             else
 
@@ -83,10 +81,11 @@ namespace WeeklyStatus_Prj
                 else { generateCSV(FilterKopf); }
             }
         }
-           
+
         private static void googleConnect()
         {
-            var scopes = new[] { "https://spreadsheets.google.com/feeds/ https://docs.googleusercontent.com/ https://docs.google.com/feeds/ https://www.google.com/m8/feeds/" };
+            var scopes = new[] { "https://spreadsheets.google.com/feeds https://docs.google.com/feeds" };
+            SpreadsheetEntry mySpreadsheet = null;
             String CLIENT_ID = GoogleClientId; // found in Developer console
             String CLIENT_SECRET = GoogleClientSecret;// found in Developer console
             UserCredential credential =
@@ -98,37 +97,59 @@ namespace WeeklyStatus_Prj
                     , scopes
                     , Environment.UserName
                     , CancellationToken.None
-                    , new FileDataStore("Daimto.GoogleSpreedSheet.Auth.Store")).Result;
-            
+                    , new FileDataStore("GoogleSpreedSheet.Auth.Store")).Result;
             SpreadsheetsService spreadsheetsService = new SpreadsheetsService("Daily Status for May");
             var requestFactory = new GDataRequestFactory("Daily Status for May");
             requestFactory.CustomHeaders.Add(string.Format("Authorization: Bearer {0}", credential.Token.AccessToken));
             spreadsheetsService.RequestFactory = requestFactory;
 
             SpreadsheetQuery query = new SpreadsheetQuery();
-           SpreadsheetFeed feed = spreadsheetsService.Query(query);
+            SpreadsheetFeed feed = spreadsheetsService.Query(query);
             foreach (SpreadsheetEntry entry in feed.Entries)
             {
-                Console.WriteLine(entry.Title.Text);
+                if (entry.Title.Text == "Daily Status")
+                {
+                    mySpreadsheet = (SpreadsheetEntry)entry;
+                };
             }
-            SpreadsheetEntry mySpreadsheet = (SpreadsheetEntry)feed.Entries[0];// to get the particular Sheet from the list of Sheet
             AtomLink link = mySpreadsheet.Links.FindService(GDataSpreadsheetsNameTable.WorksheetRel, null);
-
             WorksheetQuery wQuery = new WorksheetQuery(link.HRef.ToString());
             WorksheetFeed wFeed = spreadsheetsService.Query(wQuery);
 
             //retrieve the cells in a worksheet
-            WorksheetEntry worksheetEntry = (WorksheetEntry)wFeed.Entries[wFeed.Entries.Count-1];//to Get the Sheet
+            WorksheetEntry worksheetEntry = (WorksheetEntry)wFeed.Entries[wFeed.Entries.Count - 1];//to Get the Sheet
             AtomLink cLink = worksheetEntry.Links.FindService(GDataSpreadsheetsNameTable.CellRel, null);
 
             CellQuery cQuery = new CellQuery(cLink.HRef.ToString());
             CellFeed cFeed = spreadsheetsService.Query(cQuery);
-
+            int LastValueCell = 1;
+            DataTable dt = GenerateStructure();
+            DataRow dr = null;
             foreach (CellEntry cCell in cFeed.Entries)
             {
-                Console.WriteLine("Value on row {0} and column {1} is {2}", cCell.Cell.Row, cCell.Cell.Column, cCell.Cell.Value);
+                if (cCell.Cell.Row != 1)
+                {
+                    if (LastValueCell != cCell.Cell.Row)
+                    {
+                        if (dr != null) { dt.Rows.Add(dr); }
+                        dr = dt.NewRow();
+                    }
+                    if (cCell.Cell.Column == 2) { dr["Id"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 3) { dr["Issue Type"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 4) { dr["Title"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 5) { dr["Assigned To"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 6) { dr["Spend hrs."] = cCell.Cell.Value; }//
+                    else if (cCell.Cell.Column == 7) { dr["Status"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 8) { dr["Remark"] = cCell.Cell.Value; }
+                    LastValueCell = (Int32)cCell.Cell.Row;
+                }
             }
+            dt.DefaultView.Sort = "Assigned To";
+            dt = dt.DefaultView.ToTable();
+            var HtmlMsg = ConvertToHtml(dt);
+            SendMail(HtmlMsg);
         }
+
         private static void generateCSV(FilterKopf issues)
         {
             DataTable dt = new DataTable();
@@ -175,14 +196,7 @@ namespace WeeklyStatus_Prj
         private static string GetHtmlTable(FilterKopf issues)
         {
             string workLogResult = "";
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Id");
-            dt.Columns.Add("Issue Type");
-            dt.Columns.Add("Title");
-            dt.Columns.Add("Assigned To");
-            dt.Columns.Add("Spend hrs.");
-            dt.Columns.Add("Status");
-            dt.Columns.Add("Remark");
+            DataTable dt = GenerateStructure();
             for (var i = 0; i < issues.Issues.Count; i++)
             {
                 DataRow dr = dt.NewRow();
@@ -211,6 +225,7 @@ namespace WeeklyStatus_Prj
             dt = dt.DefaultView.ToTable();
             return ConvertToHtml(dt);
         }
+
         private static string ConvertToHtml(DataTable dt)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -362,6 +377,18 @@ namespace WeeklyStatus_Prj
             string mergedCredentials = string.Format("{0}:{1}", JiraLogin, JiraPwd);
             byte[] byteCredentials = UTF8Encoding.UTF8.GetBytes(mergedCredentials);
             return Convert.ToBase64String(byteCredentials);
+        }
+        private static DataTable GenerateStructure()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Id");
+            dt.Columns.Add("Issue Type");
+            dt.Columns.Add("Title");
+            dt.Columns.Add("Assigned To");
+            dt.Columns.Add("Spend hrs.");
+            dt.Columns.Add("Status");
+            dt.Columns.Add("Remark");
+            return dt;
         }
     }
 }
