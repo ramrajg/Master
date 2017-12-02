@@ -36,7 +36,7 @@ namespace WeeklyStatus_Prj
         public static int SmtpPort = AppSettings.Get<int>("SmtpPort");
         public static string GoogleClientId = AppSettings.Get<string>("GoogleClientId");
         public static string GoogleClientSecret = AppSettings.Get<string>("GoogleClientSecret");
-     
+
 
 
 
@@ -97,7 +97,7 @@ namespace WeeklyStatus_Prj
                     , scopes
                     , Environment.UserName
                     , CancellationToken.None
-                    , new FileDataStore("GoogleSpreedSheet.Auth.Store")).Result;
+                    , new FileDataStore("GoogleSpreedSheets.Auth.Store")).Result;
             SpreadsheetsService spreadsheetsService = new SpreadsheetsService("Daily Status for May");
             var requestFactory = new GDataRequestFactory("Daily Status for May");
             requestFactory.CustomHeaders.Add(string.Format("Authorization: Bearer {0}", credential.Token.AccessToken));
@@ -140,10 +140,14 @@ namespace WeeklyStatus_Prj
                     else if (cCell.Cell.Column == 5) { dr["Assigned To"] = cCell.Cell.Value; }
                     else if (cCell.Cell.Column == 6) { dr["Spend hrs."] = cCell.Cell.Value; }//
                     else if (cCell.Cell.Column == 7) { dr["Status"] = cCell.Cell.Value; }
-                    else if (cCell.Cell.Column == 8) { dr["Remark"] = cCell.Cell.Value; }
+                    else if (cCell.Cell.Column == 8)
+                    {
+                        dr["Remark"] = cCell.Cell.Value;
+                    }
                     LastValueCell = (Int32)cCell.Cell.Row;
                 }
             }
+            if (dr != null) { dt.Rows.Add(dr); }
             dt.DefaultView.Sort = "Assigned To";
             dt = dt.DefaultView.ToTable();
             var HtmlMsg = ConvertToHtml(dt);
