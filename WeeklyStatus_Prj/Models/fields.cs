@@ -1,36 +1,39 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace WeeklyStatus_Prj
 {
     internal class fields
     {
-        [DataMember]
-        public string description { get; set; }
-        [DataMember]
-        public string summary { get; set; }
-        [DataMember]
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+        [JsonProperty(PropertyName = "summary")]
+        public string Summary { get; set; }
+        [JsonProperty]
         public status Status { get; set; }
-        [DataMember]
+        [JsonProperty]
         public issuetype IssueType { get; set; }
-        [DataMember]
+        [JsonProperty]
         public assignee Assignee { get; set; }
-        [DataMember]
-        public creator creator { get; set; }
-        [DataMember]
-        public reporter reporter { get; set; }
-        [DataMember]
-        public priority priority { get; set; }
-        [DataMember]
+        [JsonProperty]
+        public creator Creator { get; set; }
+        [JsonProperty]
+        public reporter Reporter { get; set; }
+        [JsonProperty]
+        public priority Priority { get; set; }
+        [JsonProperty]
         public DateTime created { get; set; }
         //[DataMember]
         //public string resolution { get; set; }
-        [DataMember]
-        public DateTime updated { get; set; }
-        [DataMember]
-        public string duedate { get; set; }
-        [DataMember]
-        public string timespent { get; set; }
+        [JsonProperty(PropertyName = "updated")]
+        public DateTime Updated { get; set; }
+        [JsonProperty(PropertyName = "duedate")]
+        public string Duedate { get; set; }
+        [JsonProperty(PropertyName = "timespent")]
+        public string Timespent { get; set; }
+
+        [JsonProperty(PropertyName = "customfield_13760")]
+        public string[] Sprint { get; set; }
 
     }
 }

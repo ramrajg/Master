@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\AppSettings.cs" />
     <Compile Include="Models\assignee.cs" />
     <Compile Include="Models\priority.cs" />
     <Compile Include="Models\reporter.cs" />

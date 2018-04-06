@@ -177,18 +177,18 @@ namespace WeeklyStatus_Prj
                 DataRow dr = dt.NewRow();
                 dr["Issue Type"] = issues.Issues[i].Fields.IssueType.name;
                 dr["Key"] = issues.Issues[i].key;
-                dr["Summary"] = issues.Issues[i].Fields.summary;
-                dr["Creator"] = issues.Issues[i].Fields.creator.name;
+                dr["Summary"] = issues.Issues[i].Fields.Summary;
+                dr["Creator"] = issues.Issues[i].Fields.Creator.name;
                 dr["Assignee"] = issues.Issues[i].Fields.Assignee.name;
-                dr["Reporter"] = issues.Issues[i].Fields.reporter.name;
-                dr["Priority"] = issues.Issues[i].Fields.priority.name;
+                dr["Reporter"] = issues.Issues[i].Fields.Reporter.name;
+                dr["Priority"] = issues.Issues[i].Fields.Priority.name;
                 dr["Status"] = issues.Issues[i].Fields.Status.name;
                 //dr["Resolution"] = issues.Issues[i].Fields.resolution;
                 dr["Created"] = issues.Issues[i].Fields.created;
-                dr["Updated"] = issues.Issues[i].Fields.updated;
-                dr["Due Date"] = issues.Issues[i].Fields.duedate;
+                dr["Updated"] = issues.Issues[i].Fields.Updated;
+                dr["Due Date"] = issues.Issues[i].Fields.Duedate;
                 dr["Resolved"] = "";
-                dr["Time Spent"] = issues.Issues[i].Fields.timespent;
+                dr["Time Spent"] = issues.Issues[i].Fields.Timespent;
                 dr["Story Points"] = "";
                 dt.Rows.Add(dr);
             }
@@ -204,11 +204,12 @@ namespace WeeklyStatus_Prj
             for (var i = 0; i < issues.Issues.Count; i++)
             {
                 DataRow dr = dt.NewRow();
+                dr["Assigned To"] = issues.Issues[i].Fields.Assignee.displayName;
                 dr["Id"] = issues.Issues[i].key;
                 dr["Issue Type"] = issues.Issues[i].Fields.IssueType.name;
-                dr["Title"] = issues.Issues[i].Fields.summary;
-                dr["Assigned To"] = issues.Issues[i].Fields.Assignee.displayName;
+                dr["Title"] = issues.Issues[i].Fields.Summary;
                 workLogResult = excuteQuery(IssuesApi + issues.Issues[i].key + "/worklog/");
+                dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0],"name=",",");
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
                 var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today select str;
                 if (LogTime.FirstOrDefault() != null)
@@ -230,15 +231,30 @@ namespace WeeklyStatus_Prj
             return ConvertToHtml(dt);
         }
 
-        private static string ConvertToHtml(DataTable dt)
+    public static string getBetween(string strSource, string strStart, string strEnd)
+    {
+        int Start, End;
+        if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+        {
+            Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+            End = strSource.IndexOf(strEnd, Start);
+            return strSource.Substring(Start, End - Start);
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    private static string ConvertToHtml(DataTable dt)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.AppendLine("<html>");
             sb.AppendLine("<body>");
-            sb.AppendLine("<table style='background-color:#ccc; width: 900px; font-size: 14px;' border ='0' cell-spacing='1' >");
+            sb.AppendLine("<table style='background-color:#ccc; width: 1200px; font-size: 14px;' border ='0' cell-spacing='1' >");
             foreach (DataColumn dc in dt.Columns)
             {
-                sb.AppendFormat("<th style='background-color:#eaeaea; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color: #333;' align ='left'>{0}</th>", dc.ColumnName);
+                sb.AppendFormat("<th col width='100';style='background-color:#C7D7EE; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color: #333;' align ='left'>{0}</th>", dc.ColumnName);
             }
             foreach (DataRow dr in dt.Rows)
             {
@@ -385,10 +401,11 @@ namespace WeeklyStatus_Prj
         private static DataTable GenerateStructure()
         {
             DataTable dt = new DataTable();
+            dt.Columns.Add("Assigned To");
             dt.Columns.Add("Id");
             dt.Columns.Add("Issue Type");
             dt.Columns.Add("Title");
-            dt.Columns.Add("Assigned To");
+            dt.Columns.Add("Sprint");
             dt.Columns.Add("Spend hrs.");
             dt.Columns.Add("Status");
             dt.Columns.Add("Remark");
