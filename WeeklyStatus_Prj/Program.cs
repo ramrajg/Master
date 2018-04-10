@@ -75,8 +75,11 @@ namespace WeeklyStatus_Prj
             {
                 if (Daily_Weekly == "D")
                 {
-                    var HtmlMsg = GetHtmlTable(FilterKopf);
-                    SendMail(HtmlMsg);
+                    DataTable Records = GetRecords(FilterKopf);
+                    if (Records.Rows.Count > 0)
+                    {
+                        SendMail(ConvertToHtml(Records));
+                    }
                 }
                 else { generateCSV(FilterKopf); }
             }
@@ -197,7 +200,7 @@ namespace WeeklyStatus_Prj
             ExportToExcel(dt, null);
 
         }
-        private static string GetHtmlTable(FilterKopf issues)
+        private static DataTable GetRecords(FilterKopf issues)
         {
             string workLogResult = "";
             DataTable dt = GenerateStructure();
@@ -217,18 +220,19 @@ namespace WeeklyStatus_Prj
                     dr["Spend hrs."] = LogTime.FirstOrDefault().timeSpent;
                     dr["Status"] = issues.Issues[i].Fields.Status.name;
                     dr["Remark"] = LogTime.FirstOrDefault().comment;
+                    dt.Rows.Add(dr);
                 }
-                else
-                {
-                    dr["Spend hrs."] = "NA";
-                    dr["Status"] = issues.Issues[i].Fields.Status.name;
-                    dr["Remark"] = "Status Changed/Comments added for this ticket";
-                }
-                dt.Rows.Add(dr);
+                //else
+                //{
+                //    dr["Spend hrs."] = "NA";
+                //    dr["Status"] = issues.Issues[i].Fields.Status.name;
+                //    dr["Remark"] = "Status Changed/Comments added for this ticket";
+                //}
+              
             }
             dt.DefaultView.Sort = "Assigned To";
             dt = dt.DefaultView.ToTable();
-            return ConvertToHtml(dt);
+            return dt; ;
         }
 
     public static string getBetween(string strSource, string strStart, string strEnd)
