@@ -212,7 +212,8 @@ namespace WeeklyStatus_Prj
                 dr["Issue Type"] = issues.Issues[i].Fields.IssueType.name;
                 dr["Title"] = issues.Issues[i].Fields.Summary;
                 workLogResult = excuteQuery(IssuesApi + issues.Issues[i].key + "/worklog/");
-                dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0],"name=",",");
+                if(issues.Issues[i].Fields.Sprint != null) { dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0], "name=", ","); }
+                else { dr["Sprint"] = "";}
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
                 var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today select str;
                 if (LogTime.FirstOrDefault() != null)
@@ -222,13 +223,6 @@ namespace WeeklyStatus_Prj
                     dr["Remark"] = LogTime.FirstOrDefault().comment;
                     dt.Rows.Add(dr);
                 }
-                //else
-                //{
-                //    dr["Spend hrs."] = "NA";
-                //    dr["Status"] = issues.Issues[i].Fields.Status.name;
-                //    dr["Remark"] = "Status Changed/Comments added for this ticket";
-                //}
-              
             }
             dt.DefaultView.Sort = "Assigned To";
             dt = dt.DefaultView.ToTable();
