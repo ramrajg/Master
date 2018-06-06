@@ -34,6 +34,8 @@ namespace WeeklyStatus_Prj
 
         [JsonProperty(PropertyName = "customfield_13760")]
         public string[] Sprint { get; set; }
-
+        [JsonProperty(PropertyName = "customfield_10280")]
+        public string StoryPoints { get; set; }
+        
     }
 }

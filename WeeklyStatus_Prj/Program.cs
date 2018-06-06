@@ -214,6 +214,7 @@ namespace WeeklyStatus_Prj
                 workLogResult = excuteQuery(IssuesApi + issues.Issues[i].key + "/worklog/");
                 if(issues.Issues[i].Fields.Sprint != null) { dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0], "name=", ","); }
                 else { dr["Sprint"] = "";}
+                dr["Story Points"] = Convert.ToInt64(Math.Round(Convert.ToDouble(issues.Issues[i].Fields.StoryPoints)));
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
                 var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today select str;
                 if (LogTime.FirstOrDefault() != null)
@@ -404,6 +405,7 @@ namespace WeeklyStatus_Prj
             dt.Columns.Add("Issue Type");
             dt.Columns.Add("Title");
             dt.Columns.Add("Sprint");
+            dt.Columns.Add("Story Points");
             dt.Columns.Add("Spend hrs.");
             dt.Columns.Add("Status");
             dt.Columns.Add("Remark");
