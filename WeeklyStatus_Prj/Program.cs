@@ -36,10 +36,9 @@ namespace WeeklyStatus_Prj
         public static int SmtpPort = AppSettings.Get<int>("SmtpPort");
         public static string GoogleClientId = AppSettings.Get<string>("GoogleClientId");
         public static string GoogleClientSecret = AppSettings.Get<string>("GoogleClientSecret");
+        public static string BodyMsg = AppSettings.Get<string>("Bodymsg");
 
-
-
-
+        
         static void Main(string[] args)
         {
             string Daily_Weekly;
@@ -332,7 +331,7 @@ namespace WeeklyStatus_Prj
             string dt = DateTime.Today.ToString("dd/MMMM/yyyy");
             dt = dt.Replace('/', '-');
             mail.Subject = "Daily Status :" + ' ' + dt;
-            mail.Body = "Hi All,</br> Please find the status for today. </br></br>" + msg + Regards;
+            mail.Body = "Hi All,</br>" + BodyMsg + "  </br></br>" + msg + Regards;
             mail.IsBodyHtml = true;
             SmtpClient smtp = new SmtpClient();
             smtp.Host = SmtpHost;
