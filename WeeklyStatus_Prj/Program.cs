@@ -215,7 +215,7 @@ namespace WeeklyStatus_Prj
                 else { dr["Sprint"] = ""; }
                 dr["Story Points"] = Convert.ToInt64(Math.Round(Convert.ToDouble(issues.Issues[i].Fields.StoryPoints)));
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
-                var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today.AddDays(-2) select str;
+                var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today select str;
                 if (LogTime.FirstOrDefault() != null)
                 {
                     dr["Spend hrs."] = LogTime.FirstOrDefault().timeSpent;
