@@ -38,7 +38,7 @@ namespace WeeklyStatus_Prj
         public static string GoogleClientSecret = AppSettings.Get<string>("GoogleClientSecret");
         public static string BodyMsg = AppSettings.Get<string>("Bodymsg");
 
-        
+
         static void Main(string[] args)
         {
             string Daily_Weekly;
@@ -211,11 +211,11 @@ namespace WeeklyStatus_Prj
                 dr["Issue Type"] = issues.Issues[i].Fields.IssueType.name;
                 dr["Title"] = issues.Issues[i].Fields.Summary;
                 workLogResult = excuteQuery(IssuesApi + issues.Issues[i].key + "/worklog/");
-                if(issues.Issues[i].Fields.Sprint != null) { dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0], "name=", ","); }
-                else { dr["Sprint"] = "";}
+                if (issues.Issues[i].Fields.Sprint != null) { dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0], "name=", ","); }
+                else { dr["Sprint"] = ""; }
                 dr["Story Points"] = Convert.ToInt64(Math.Round(Convert.ToDouble(issues.Issues[i].Fields.StoryPoints)));
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
-                var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today select str;
+                var LogTime = from str in workLogs.WorkLogs where str.started >= DateTime.Today.AddDays(-2) select str;
                 if (LogTime.FirstOrDefault() != null)
                 {
                     dr["Spend hrs."] = LogTime.FirstOrDefault().timeSpent;
@@ -229,22 +229,22 @@ namespace WeeklyStatus_Prj
             return dt; ;
         }
 
-    public static string getBetween(string strSource, string strStart, string strEnd)
-    {
-        int Start, End;
-        if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+        public static string getBetween(string strSource, string strStart, string strEnd)
         {
-            Start = strSource.IndexOf(strStart, 0) + strStart.Length;
-            End = strSource.IndexOf(strEnd, Start);
-            return strSource.Substring(Start, End - Start);
+            int Start, End;
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            else
+            {
+                return "";
+            }
         }
-        else
-        {
-            return "";
-        }
-    }
 
-    private static string ConvertToHtml(DataTable dt)
+        private static string ConvertToHtml(DataTable dt)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             sb.AppendLine("<html>");
@@ -260,7 +260,15 @@ namespace WeeklyStatus_Prj
                 foreach (DataColumn dc in dt.Columns)
                 {
                     string cellValue = dr[dc] != null ? dr[dc].ToString() : "";
-                    sb.AppendFormat("<td style='background-color:#fff; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color: #666'>{0}</td>", cellValue);
+                    if (dr[dc].ToString() == "In Progress" || dr[dc].ToString() == "In Progress (DEV)")
+                    {
+                        sb.AppendFormat("<td style='background-color:#fff; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color: #0c24dc'>{0}</td>", cellValue);
+                    }
+                    else if (dr[dc].ToString() == "Complete")
+                    {
+                        sb.AppendFormat("<td style='background-color:#fff; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color:#27bd16'>{0}</td>", cellValue);
+                    }
+                    else { sb.AppendFormat("<td style='background-color:#fff; font-size: 14px; padding: 5px; font-family: Arial; san-serif; color:#666'>{0}</td>", cellValue); }
                 }
                 sb.AppendLine("</ tr >");
             }
