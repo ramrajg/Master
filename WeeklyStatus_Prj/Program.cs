@@ -25,11 +25,11 @@ namespace WeeklyStatus_Prj
         public static string FilterApi = AppSettings.Get<string>("FilterApi");
         public static string IssuesApi = AppSettings.Get<string>("IssuesApi");
         public static string JiraLogin = AppSettings.Get<string>("JiraLogin");
-        public static string JiraPwd = AppSettings.Get<string>("JiraPwd");
+        public static string JiraPwd = EncryptDecryptPrj.Encrypt.DecryptString(AppSettings.Get<string>("JiraPwd"), "This is Cool");
         public static int DailyStatusFilterId = AppSettings.Get<int>("DailyStatusFilterId");
         public static int WeeklyStatusFilterId = AppSettings.Get<int>("WeeklyStatusFilterId");
         public static string emailFrom = AppSettings.Get<string>("emailFrom");
-        public static string emailFromPwd = AppSettings.Get<string>("emailFromPwd");
+        public static string emailFromPwd = EncryptDecryptPrj.Encrypt.DecryptString(AppSettings.Get<string>("emailFromPwd"), "This is Cool");
         public static string emailTo = AppSettings.Get<string>("emailTo");
         public static string emailCc = AppSettings.Get<string>("emailCc");
         public static string SmtpHost = AppSettings.Get<string>("SmtpHost");

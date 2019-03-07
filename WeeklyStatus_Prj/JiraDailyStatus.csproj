@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helper\AppSettings.cs" />
+    <Compile Include="Helper\Encrypt.cs" />
     <Compile Include="Models\assignee.cs" />
     <Compile Include="Models\priority.cs" />
     <Compile Include="Models\reporter.cs" />
