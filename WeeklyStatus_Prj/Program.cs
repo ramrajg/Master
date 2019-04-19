@@ -211,7 +211,9 @@ namespace WeeklyStatus_Prj
                 dr["Issue Type"] = issues.Issues[i].Fields.IssueType.name;
                 dr["Title"] = issues.Issues[i].Fields.Summary;
                 workLogResult = excuteQuery(IssuesApi + issues.Issues[i].key + "/worklog/");
-                if (issues.Issues[i].Fields.Sprint != null) { dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[0], "name=", ","); }
+                if (issues.Issues[i].Fields.Sprint != null) {
+                    dr["Sprint"] = getBetween(issues.Issues[i].Fields.Sprint[(issues.Issues[i].Fields.Sprint.Count() > 1 ? issues.Issues[i].Fields.Sprint.Count() - 1 : 0) ], "name=", ",");
+                }
                 else { dr["Sprint"] = ""; }
                 dr["Story Points"] = Convert.ToInt64(Math.Round(Convert.ToDouble(issues.Issues[i].Fields.StoryPoints)));
                 FilterKopf workLogs = JsonConvert.DeserializeObject<FilterKopf>(workLogResult);
